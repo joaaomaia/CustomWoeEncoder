@@ -41,7 +41,7 @@ df_novo = novo_encoder.transform(novo_df)
 | `fit_transform(X, y)`   | Executa `fit` e `transform` juntos.                                 |
 | `summary(path=None)`    | Exporta um DataFrame com WoE, IV e categorias.                      |
 | `plot_woe(feature)`     | Plota gráfico horizontal de WoE por categoria.                      |
-| `export_log()`          | Retorna o dicionário interno com os mapeamentos WoE.                |
+| `view_log()`          | Retorna o dicionário interno com os mapeamentos WoE.                |
 | `export_log_json(path)` | Salva `woe_log_` e `iv_log_` em JSON.                               |
 | `load_from_json(path)`  | Cria um novo encoder pronto para `transform()` com base em um JSON. |
 | `save(path)`            | Salva o encoder inteiro em formato `pickle`.                        |
