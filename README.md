@@ -13,10 +13,10 @@ Transforme variáveis categóricas usando **Weight of Evidence (WoE)** com supor
 ## 🚀 Exemplo Rápido
 
 ```python
-from custom_woe_encoder import CustomWOEEncoder
+from woe_guard import WOEGuard
 
 # Ajustar encoder
-encoder = CustomWOEEncoder(categorical_cols=['sexo', 'produto'])
+encoder = WOEGuard(categorical_cols=['sexo', 'produto'])
 encoder.fit(df[['sexo', 'produto']], df['target'])
 
 # Aplicar transformação
@@ -26,7 +26,7 @@ df_w = encoder.transform(df)
 encoder.export_log_json("woe_log.json")
 
 # Reusar em produção
-novo_encoder = CustomWOEEncoder.load_from_json("woe_log.json")
+novo_encoder = WOEGuard.load_from_json("woe_log.json")
 df_novo = novo_encoder.transform(novo_df)
 ```
 
@@ -69,7 +69,7 @@ df_novo = novo_encoder.transform(novo_df)
 encoder.export_log_json("woe_log.json")
 
 # Reutilizar depois
-encoder_reusado = CustomWOEEncoder.load_from_json("woe_log.json")
+encoder_reusado = WOEGuard.load_from_json("woe_log.json")
 encoder_reusado.transform(novo_dataframe)
 ```
 
