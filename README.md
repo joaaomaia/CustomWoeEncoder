@@ -1,4 +1,4 @@
-# 🧮 Custom WOE Encoder
+# 🧮 WOEGuard
 
 Transforme variáveis categóricas usando **Weight of Evidence (WoE)** com suporte a:
 
