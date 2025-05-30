@@ -30,7 +30,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 __all__ = ["CustomWOEEncoder"]
 
 
-class CustomWOEEncoder(BaseEstimator, TransformerMixin):
+class WOEGuard(BaseEstimator, TransformerMixin):
     """Encoder de Peso de Evidência (WoE) para variáveis categóricas.
 
     Parameters
