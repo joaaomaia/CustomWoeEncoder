@@ -16,14 +16,14 @@ Transforme variáveis categóricas usando **Weight of Evidence (WoE)** com supor
 from woe_guard import WOEGuard
 
 # Ajustar encoder
-encoder = WOEGuard(categorical_cols=['sexo', 'produto'])
-encoder.fit(df[['sexo', 'produto']], df['target'])
+encoder = WOEGuard(categorical_cols=['uf', 'produto'])
+encoder.fit(df[['uf', 'produto']], df['target'])
 
 # Aplicar transformação
 df_w = encoder.transform(df)
 
 # Salvar log em JSON
-encoder.export_log_json("woe_log.json")
+encoder.export_log("woe_log.json")
 
 # Reusar em produção
 novo_encoder = WOEGuard.load_from_json("woe_log.json")
@@ -42,7 +42,7 @@ df_novo = novo_encoder.transform(novo_df)
 | `summary(path=None)`    | Exporta um DataFrame com WoE, IV e categorias.                      |
 | `plot_woe(feature)`     | Plota gráfico horizontal de WoE por categoria.                      |
 | `view_log()`          | Retorna o dicionário interno com os mapeamentos WoE.                |
-| `export_log_json(path)` | Salva `woe_log_` e `iv_log_` em JSON.                               |
+| `export_log(path)` | Salva `woe_log_` e `iv_log_` em JSON.                               |
 | `load_from_json(path)`  | Cria um novo encoder pronto para `transform()` com base em um JSON. |
 | `save(path)`            | Salva o encoder inteiro em formato `pickle`.                        |
 | `load(path)`            | Carrega um encoder previamente salvo via `save`.                    |
@@ -66,7 +66,7 @@ df_novo = novo_encoder.transform(novo_df)
 
 ```python
 # Exportar
-encoder.export_log_json("woe_log.json")
+encoder.export_log("woe_log.json")
 
 # Reutilizar depois
 encoder_reusado = WOEGuard.load_from_json("woe_log.json")
