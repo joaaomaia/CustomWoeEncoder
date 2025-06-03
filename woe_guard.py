@@ -12,7 +12,7 @@ Features
 * Stores full WoE mapping (`woe_log_`) and IV per feature (`iv_log_`).
 * Provides `summary()` to export detailed report to Excel (``.xlsx``).
 * Offers `plot_woe()` for quick visual inspection.
-* Supports persistence (`save`, `load`, `export_log_json`, `load_from_json`) via `pickle` or JSON.
+* Supports persistence (`save`, `load`, `export_log`, `load_from_json`) via `pickle` or JSON.
 * Robust to unseen categories at transform time (configurable default), with warnings for missing columns.
 """
 
@@ -27,7 +27,7 @@ import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 
-__all__ = ["CustomWOEEncoder"]
+__all__ = ["WOEGuard"]
 
 
 class WOEGuard(BaseEstimator, TransformerMixin):
@@ -140,14 +140,18 @@ class WOEGuard(BaseEstimator, TransformerMixin):
         return X
 
     def fit_transform(self, X: pd.DataFrame, y: pd.Series) -> pd.DataFrame:  # type: ignore[override]
-        """Ajusta e transforma em uma só etapa."""
-        return self.fit(X, y).transform(X)
+        """Ajusta e transforma em uma só etapa e retorna `X` transformado com `y` como primeira coluna."""
+        Xt = self.fit(X, y).transform(X)
+        Xt[y.name] = y.values  # adiciona a coluna y
+        # reorganiza para que y fique como primeira coluna
+        cols = [y.name] + [c for c in Xt.columns if c != y.name]
+        return Xt[cols]
 
     def view_log(self) -> Dict[str, Dict]:
         """Retorna o mapeamento interno `woe_log_`."""
         return self.woe_log_
 
-    def export_log_json(self, path: Union[str, Path]) -> None:
+    def export_log(self, path: Union[str, Path]) -> None:
         """Salva `woe_log_` e `iv_log_` em arquivo JSON."""
         data = {"woe_log": self.woe_log_, "iv_log": self.iv_log_}
         with open(path, "w", encoding="utf-8") as f:
@@ -162,7 +166,7 @@ class WOEGuard(BaseEstimator, TransformerMixin):
         alpha: Optional[float] = None,
         default_woe: Optional[float] = None,
         include_nan: Optional[bool] = None,
-    ) -> "CustomWOEEncoder":
+    ) -> "WOEGuard":
         """Carrega mapeamento de JSON e retorna um encoder pronto para `transform()`.
 
         Parâmetros opcionais servem para reconfigurar a instância."""
@@ -223,7 +227,7 @@ class WOEGuard(BaseEstimator, TransformerMixin):
             pickle.dump(self, f)
 
     @staticmethod
-    def load(path: Union[str, Path]) -> "CustomWOEEncoder":
+    def load(path: Union[str, Path]) -> "WOEGuard":
         """Carrega encoder salvo via `save()`."""
         with open(path, "rb") as f:
             return pickle.load(f)
@@ -231,6 +235,6 @@ class WOEGuard(BaseEstimator, TransformerMixin):
     def __repr__(self) -> str:
         status = "fitted" if getattr(self, "fitted_", False) else "unfitted"
         return (
-            f"<CustomWOEEncoder n_features={len(self.categorical_cols)} status={status} "
+            f"<WOEGuard n_features={len(self.categorical_cols)} status={status} "
             f"drop_original={self.drop_original}>"
         )
