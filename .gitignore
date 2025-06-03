@@ -7,5 +7,5 @@ echo "__pycache__/
 .env
 .venv
 .idea/
-.vscode/" > .gitignore
-imgs/olds/
+.vscode/
+imgs/olds/" > .gitignore
