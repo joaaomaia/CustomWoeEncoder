@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./imgs/social_preview_github.png" alt="WOEGuard Banner" width="100%" />
+</p>
+
 # 🧮 WOEGuard
 
 Transforme variáveis categóricas usando **Weight of Evidence (WoE)** com suporte a:

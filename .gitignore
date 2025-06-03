@@ -8,3 +8,4 @@ echo "__pycache__/
 .venv
 .idea/
 .vscode/" > .gitignore
+img/olds/
