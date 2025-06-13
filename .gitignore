@@ -9,3 +9,4 @@ echo "__pycache__/
 .idea/
 .vscode/
 imgs/olds/" > .gitignore
+woe_encoder.pkl
