@@ -10,6 +10,7 @@ Transforme variáveis categóricas usando **Weight of Evidence (WoE)** com supor
 - Exportação e importação via `.json` para reuso em produção
 - Cálculo de Information Value (IV)
 - Compatível com `scikit-learn` Pipelines
+- Tratamento auditável de valores ausentes
 - Visualização com gráficos e exportação de relatórios `.xlsx`
 
 ---
