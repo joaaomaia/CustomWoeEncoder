@@ -41,7 +41,10 @@ class ReportBuilder:
         Path(path).write_text(html, encoding="utf-8")
 
     def to_text(self) -> str:
-        return self._summary().to_string()
+        text = self._summary().to_string()
+        text += "\n\nMissing-Value Treatment\n"
+        text += self._missing_section()
+        return text
 
     def save_plot(self, path: str | Path) -> None:
         counts = [self.X_raw.shape[1], self.X_enc.shape[1]]
@@ -50,3 +53,13 @@ class ReportBuilder:
         plt.tight_layout()
         plt.savefig(path)
         plt.close()
+
+    # ------------------------------------------------------------------
+    def _missing_section(self) -> str:
+        sentinel = self.metadata.get("missing", {}).get("sentinel")
+        raw_pct = self.X_raw.isna().mean() * 100
+        enc_pct = self.X_enc.isna().mean() * 100
+        df = pd.DataFrame({"raw_pct": raw_pct, "encoded_pct": enc_pct})
+        df = df[df["raw_pct"] > 0]
+        sec = df.round(2).to_string()
+        return f"sentinel: {sentinel}\n{sec}"
