@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-from typing import Dict, Type, Iterable, Protocol, Optional
+from typing import Dict, Type, Iterable, Protocol, Optional, Any
 
 import pandas as pd
+import joblib
+
+VERSION_HEADER = 1
 
 from .memory_manager import MemoryManager
 from .encoders import WOEGuard, TargetEncoder, LeaveOneOutEncoder, OneHotEncoder
@@ -50,3 +53,20 @@ class EncodingManager:
     def fit_transform(self, X: pd.DataFrame, y: pd.Series) -> pd.DataFrame:
         self.fit(X, y)
         return self.transform(X)
+
+    # Serialization -------------------------------------------------
+    def save(self, path: str) -> None:
+        payload = {
+            "version": VERSION_HEADER,
+            "encoder": self.encoder,
+        }
+        joblib.dump(payload, path)
+
+    @classmethod
+    def load(cls, path: str) -> "EncodingManager":
+        payload: dict[str, Any] = joblib.load(path)
+        _version = payload.get("version", 0)
+        enc = payload["encoder"]
+        manager = cls(enc.__class__.__name__.lower())
+        manager.encoder = enc
+        return manager
