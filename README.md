@@ -36,6 +36,19 @@ df_novo = novo_encoder.transform(novo_df)
 
 ---
 
+## 🔄 Fluxo de Processamento
+
+```mermaid
+flowchart LR
+    A[Dados brutos + target] --> B[EncodingManager]
+    B --> |fit| C[Encoder interno]
+    C --> D[Mapeamentos]
+    B --> |transform| E[DataFrame codificado]
+    E --> F[Modelo/Pipeline]
+```
+
+---
+
 ## 📒 API Reference
 
 | Método                  | Descrição                                                           |
@@ -75,6 +88,22 @@ encoder.export_log("woe_log.json")
 # Reutilizar depois
 encoder_reusado = WOEGuard.load_from_json("woe_log.json")
 encoder_reusado.transform(novo_dataframe)
+```
+
+---
+
+## 📚 Exemplos de Uso
+
+Scripts completos estão disponíveis em [`src/examples`](src/examples):
+
+- `simple_usage.py` – demonstra o ajuste e aplicação do `WOEGuard`.
+- `pipeline_example.py` – constrói um pipeline de treinamento utilizando o `EncodingManager`.
+
+Execute-os com:
+
+```bash
+python src/examples/simple_usage.py
+python src/examples/pipeline_example.py
 ```
 
 ---
